@@ -12,3 +12,6 @@ class ROT13Cipher:
                 encrypted.append(char)
 
         return "".join(encrypted)
+
+    def decrypt(self, text: str) -> str:
+        return self.encrypt(text)

@@ -21,3 +21,21 @@ class VigenereCipher:
                 ciphertext.append(char)
 
         return "".join(ciphertext)
+
+    def decrypt(self, ciphertext: str) -> str:
+        plaintext = []
+        key_position = 0
+
+        for char in ciphertext:
+            if char.isascii() and char.isalpha():
+                base = ord("A") if char.isupper() else ord("a")
+                cipher_value = ord(char) - base
+                key_value = ord(self.key[key_position % len(self.key)]) - ord("A")
+                plaintext.append(
+                    chr((cipher_value - key_value) % 26 + base)
+                )
+                key_position += 1
+            else:
+                plaintext.append(char)
+
+        return "".join(plaintext)

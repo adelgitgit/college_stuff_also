@@ -2,24 +2,25 @@ from enum import Enum
 from typing import TypeAlias
 
 from .easy import EasyCipherGen
-from .high import HighCipherGen
+from .hard import HardCipherGen
 from .medium import MediumCipherGen
 
 
 class EncryptionLevel(str, Enum):
     EASY = "easy"
     MEDIUM = "medium"
-    HIGH = "high"
+    HARD = "hard"
+    HIGH = "hard"
 
 
-CipherGenerator: TypeAlias = EasyCipherGen | MediumCipherGen | HighCipherGen
+CipherGenerator: TypeAlias = EasyCipherGen | MediumCipherGen | HardCipherGen
 
 
 class CipherFactory:
     _generators = {
         EncryptionLevel.EASY: EasyCipherGen,
         EncryptionLevel.MEDIUM: MediumCipherGen,
-        EncryptionLevel.HIGH: HighCipherGen,
+        EncryptionLevel.HARD: HardCipherGen,
     }
 
     @classmethod
@@ -28,7 +29,10 @@ class CipherFactory:
             normalized_level = level
         elif isinstance(level, str):
             try:
-                normalized_level = EncryptionLevel(level.strip().lower())
+                level_name = level.strip().lower()
+                if level_name == "high":
+                    level_name = EncryptionLevel.HARD.value
+                normalized_level = EncryptionLevel(level_name)
             except ValueError as error:
                 supported = ", ".join(item.value for item in EncryptionLevel)
                 raise ValueError(
